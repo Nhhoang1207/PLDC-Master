@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz PLDC - Pro Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="particles-bg">
+        <div class="particle" data-char="⭐"></div>
+        <div class="particle" data-char="📚"></div>
+        <div class="particle" data-char="💜"></div>
+        <div class="particle" data-char="✨"></div>
+        <div class="particle" data-char="🌸"></div>
+        <div class="particle" data-char="⚡"></div>
+        <div class="particle" data-char="👑"></div>
+        <div class="particle" data-char="🎯"></div>
+        <div class="particle" data-char="🌟"></div>
+        <div class="particle" data-char="💫"></div>
+        <div class="particle" data-char="🎓"></div>
+        <div class="particle" data-char="🔥"></div>
+    </div>
+    <div class="star-field" id="star-field"></div>
+    <div class="toast" id="toast"></div>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+        <div class="header__inner">
+            <div class="header__logo" id="logo-home">
+                <div class="header__logo-icon">⚡</div>
+                <span class="header__title">PLDC Master</span>
+            </div>
+            
+            <div class="header__stats">
+                <div class="stat-badge stat-badge--xp" title="Điểm kinh nghiệm">
+                    <span class="stat-badge__icon">⚡</span>
+                    <span class="stat-badge__value" id="xp-count">0</span>
+                </div>
+                <div class="header__level" title="Cấp độ hiện tại">
+                    <div class="level-circle">
+                        <span id="user-level">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header__actions">
+                <button class="btn btn--icon" id="btn-theme-cycle" title="Đổi giao diện nhanh">
+                    <span style="font-size: 1.2rem;">🎨</span>
+                </button>
+                <button class="btn btn--icon" id="btn-shop" title="Cửa hàng Giao diện">
+                    <span style="font-size: 1.2rem;">🛒</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- ===== HOME SCREEN ===== -->
+        <section class="screen screen--home active" id="screen-home">
+            <div class="home__hero">
+                <h1 class="home__title">
+                    <span class="home__title-line">Chinh Phục</span>
+                    <span class="home__title-line home__title-line--accent">Pháp Luật Đại Cương</span>
+                </h1>
+            </div>
+
+            <!-- Mode Selection -->
+            <div class="mode-selector" id="mode-selector">
+                <button class="mode-btn mode-btn--active glass-panel" data-mode="practice" id="btn-mode-practice">
+                    <div class="mode-btn__icon">⚔️</div>
+                    <div class="mode-btn__text">
+                        <span class="mode-btn__label">Luyện Tập</span>
+                        <span class="mode-btn__desc">Học & Nhận XP ngay</span>
+                    </div>
+                </button>
+                <button class="mode-btn glass-panel" data-mode="exam" id="btn-mode-exam">
+                    <div class="mode-btn__icon">🏆</div>
+                    <div class="mode-btn__text">
+                        <span class="mode-btn__label">Thi Thử</span>
+                        <span class="mode-btn__desc">Thử thách bản thân</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Review Wrong Questions Banner -->
+            <div id="review-banner-container" style="display: none; margin-bottom: 2rem;">
+                <div class="review-banner glass-panel">
+                    <div class="review-banner__icon">🔥</div>
+                    <div class="review-banner__content">
+                        <h3 class="review-banner__title">Góc Ôn Tập</h3>
+                        <p class="review-banner__text">Bạn đang có <strong id="wrong-count" style="color: var(--danger);">0</strong> câu hỏi cần củng cố lại.</p>
+                    </div>
+                    <button class="btn btn--primary" id="btn-start-review">Ôn tập ngay</button>
+                </div>
+            </div>
+
+            <!-- Quiz Cards Grid -->
+            <div class="quiz-grid" id="quiz-grid"></div>
+        </section>
+
+        <!-- ===== SHOP SCREEN ===== -->
+        <section class="screen screen--shop" id="screen-shop">
+            <div class="shop-header">
+                <h2 class="shop-title">Cửa Hàng Giao Diện</h2>
+                <p class="shop-subtitle">Dùng điểm ⚡ XP của bạn để mở khóa các bộ giao diện độc quyền.</p>
+                <div class="shop-xp-balance">
+                    <span>Số dư hiện tại:</span>
+                    <span class="xp-balance-val"><span id="shop-xp-balance">0</span> ⚡</span>
+                </div>
+            </div>
+
+            <div class="shop-grid" id="shop-grid">
+                <!-- Shop items will be generated by JS -->
+            </div>
+            
+            <div class="shop-actions">
+                <button class="btn btn--ghost btn--lg" id="btn-shop-back">⬅ Quay lại Trang chủ</button>
+            </div>
+        </section>
+
+        <!-- ===== QUIZ SCREEN ===== -->
+        <section class="screen screen--quiz" id="screen-quiz">
+            <div class="quiz-topbar glass-panel" id="quiz-topbar">
+                <button class="btn btn--ghost" id="btn-back-home">⬅ Quay lại</button>
+                <div class="quiz-topbar__info">
+                    <span class="quiz-topbar__name" id="quiz-name"></span>
+                    <span class="quiz-topbar__progress" id="quiz-progress"></span>
+                </div>
+                <div class="quiz-topbar__actions">
+                    <button class="btn btn--ghost" id="btn-shuffle">🔀 Trộn</button>
+                    <button class="btn btn--primary" id="btn-submit" style="display:none;">Nộp bài</button>
+                </div>
+            </div>
+
+            <div class="quiz-layout">
+                <aside class="quiz-sidebar glass-panel" id="quiz-sidebar">
+                    <div class="sidebar__header">
+                        <h3 class="sidebar__title">Danh sách câu hỏi</h3>
+                        <div class="sidebar__legend">
+                            <span class="legend-item legend-item--unanswered">Chưa làm</span>
+                            <span class="legend-item legend-item--answered">Đã làm</span>
+                            <span class="legend-item legend-item--correct">Đúng</span>
+                            <span class="legend-item legend-item--incorrect">Sai</span>
+                        </div>
+                    </div>
+                    <div class="question-map" id="question-map"></div>
+                    <div class="sidebar__score" id="sidebar-score">
+                        <div class="score-ring" id="score-ring">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="score-ring__bg" cx="50" cy="50" r="42"/>
+                                <circle class="score-ring__fill" cx="50" cy="50" r="42" id="score-ring-fill"/>
+                            </svg>
+                            <div class="score-ring__text" id="score-ring-text">0%</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="quiz-content">
+                    <div class="question-card glass-panel tilt-card" id="question-card">
+                        <div class="question-card__header">
+                            <span class="question-card__number" id="question-number">Câu 1</span>
+                            <span class="question-card__badge" id="question-badge"></span>
+                        </div>
+                        <div class="question-card__body">
+                            <p class="question-card__text" id="question-text"></p>
+                        </div>
+                        <div class="question-card__options" id="question-options"></div>
+                        <div class="question-card__feedback glass-panel" id="question-feedback" style="display:none;">
+                            <div class="feedback__icon" id="feedback-icon"></div>
+                            <div class="feedback__content">
+                                <p class="feedback__title" id="feedback-title"></p>
+                                <p class="feedback__text" id="feedback-text"></p>
+                                <p class="feedback__explanation" id="feedback-explanation" style="margin-top: 8px; font-size: 0.9rem; opacity: 0.8;"></p>
+                            </div>
+                            <div class="feedback__xp" id="feedback-xp" style="display:none;">+10 XP</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-nav glass-panel" id="quiz-nav">
+                        <button class="btn btn--ghost" id="btn-prev">⬅ Trước</button>
+                        <div class="quiz-nav__indicator">
+                            <div class="progress-bar" id="progress-bar">
+                                <div class="progress-bar__fill" id="progress-bar-fill"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn--ghost" id="btn-next">Sau ➡</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== RESULT SCREEN ===== -->
+        <section class="screen screen--result" id="screen-result">
+            <div class="result glass-panel">
+                <div class="result__header">
+                    <div class="result__icon" id="result-icon"></div>
+                    <h2 class="result__title" id="result-title">Hoàn thành!</h2>
+                    <p class="result__subtitle" id="result-subtitle"></p>
+                    <div class="result__xp-earned">
+                        <span class="xp-earned-icon">⚡</span>
+                        <span id="result-xp-earned">+0 XP</span>
+                    </div>
+                </div>
+
+                <div class="result__score-card" id="result-score-card">
+                    <div class="result__score-ring">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="score-ring__bg" cx="60" cy="60" r="52"/>
+                            <circle class="score-ring__fill" cx="60" cy="60" r="52" id="result-ring-fill"/>
+                        </svg>
+                        <div class="result__score-text">
+                            <span class="result__score-value" id="result-score-value">0</span>
+                            <span class="result__score-total" id="result-score-total">/0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result__review" id="result-review">
+                    <h3 class="result__review-title">Các câu trả lời sai</h3>
+                    <div class="result__review-list" id="result-review-list"></div>
+                </div>
+
+                <div class="result__actions">
+                    <button class="btn btn--primary btn--lg" id="btn-retry">Làm lại</button>
+                    <button class="btn btn--ghost btn--lg" id="btn-home">Về trang chủ</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="fab fab--sidebar" id="btn-toggle-sidebar" style="display:none;">☰</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
