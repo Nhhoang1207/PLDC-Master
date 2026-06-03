@@ -193,7 +193,7 @@
     // ===== DATA LOADING =====
     async function loadQuizzes() {
         try {
-            const resp = await fetch('quizzes.json');
+            const resp = await fetch('quizzes.json?v=' + new Date().getTime());
             if (!resp.ok) throw new Error('Failed to load');
             const data = await resp.json();
             state.quizzes = data.quizzes;
